@@ -44,7 +44,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	@Override
 	public boolean isConnected() {
 		Iterator<node_info> itt=g.getV().iterator();
-		if(g.getV().size()<2)return true;
+		if(g.nodeHashMap.size()<2)return true;
 		bfs(itt.next());
 		Iterator<node_info> ittt=g.getV().iterator();
 		while(ittt.hasNext()) {
@@ -55,9 +55,10 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
 	public void bfs(node_info node )
     {
-
-        for(node_info i :this.g.getV()){
-            i.setTag(0);
+		Iterator itt=g.getV().iterator();
+        while(itt.hasNext()){
+        	node_info nd= (node_info) itt.next();
+        	nd.setTag(0);
         }
         node_info nodeInfo;
         node.setTag(1);
@@ -65,8 +66,8 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         while (!queue.isEmpty())
         {
         	nodeInfo = queue.remove();
-        	if(!g.getV(nodeInfo.getKey()).isEmpty()) {
-         //  if(!nd.getNi().isEmpty()) {
+        	nodeInfo.setTag(1);
+        	if(!(g.getV(nodeInfo.getKey()).isEmpty())) {
             Iterator<node_info> it=g.getV(nodeInfo.getKey()).iterator();
             while (it.hasNext())
             {
@@ -74,7 +75,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
                 if (nTampe.getTag()==0)
                 {
                     queue.add(nTampe);
-                    nTampe.setTag(1);
+                    //nTampe.setTag(1);
                 }
             }
             }

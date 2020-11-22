@@ -125,10 +125,12 @@ public class WGraph_DS implements weighted_graph {
 
 	@Override
 	public Collection<node_info> getV(int node_id) {//return naiber collection
-		Collection<node_info> tampeCollection = null;
-		for(Edge i:edges) {
+		Collection<node_info> tampeCollection = new LinkedList<node_info>();
+		Iterator<Edge> it=edges.iterator();
+		Edge i;
+		while(it.hasNext()) {
+			i=it.next();
 			if(i.getStart()==node_id)tampeCollection.add(getNode(i.getEnd()));
-			
 		}
 		return tampeCollection;
 	}
