@@ -1,11 +1,10 @@
 package ex1.src;
 
-import java.sql.Array;
 
 public class Edge {
-	private int start;
-	private double val;
-	private int end;
+	private int start=0;
+	private double val=0;
+	private int end=0;
 	public Edge() {}
 	public Edge(int s,double v,int e) {
 		this.start=s;
