@@ -1,17 +1,26 @@
 package ex1.src;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
 
 import ex1.src.WGraph_DS.NodeInfo;
 
 
 public class WGraph_Algo implements weighted_graph_algorithms {
 	WGraph_DS g;
+	//WGraph_DS g2;
 	NodeInfo nodInfo;
 	final int maxInt=Integer.MAX_VALUE;
 	Queue<node_info> queue =new LinkedList<node_info>();
@@ -128,57 +137,69 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	
 	@Override
 	public List<node_info> shortestPath(int src, int dest) {
-		List<node_info> result = new ArrayList<node_info>()  ;
-        if (this.g.getNode(src) == null || this.g.getNode(dest) == null ){
-            return result;
-        }
-        Iterator<node_info> it =g.getV().iterator();
-		while (it.hasNext()) {
-			it.next().setTag(0);	
-		}
-        node_info ferst = g.getNode(src);
-        queue.add(ferst);
-        ferst.setTag(ferst.getKey());
-        while(!queue.isEmpty()){
-        	node_info tampe =  queue.poll();
-            if(!g.getV(tampe.getKey()).isEmpty()) {
-            Iterator<node_info> itt =g.getV(tampe.getKey()).iterator();
-        		while (itt.hasNext()) {
-        			node_info nd=itt.next();
-        			if(nd.getTag() == 0 ) {
-                        nd.setTag(tampe.getKey());
-                        queue.add(nd);
-                       }
-        			}
-            }
-        }
-        node_info finish = this.g.getNode(dest);
-        if (finish.getTag() == 0) return result;
-        result.add(ferst);
-
-        node_info tampe = this.g.getNode((int)finish.getTag());
-
-        while(tampe.getTag() != tampe.getKey()){
-        	result.add(0, tampe);
-        	tampe = this.g.getNode((int)tampe.getTag());
-
-        }
-        result.add(0, finish);
-
-        return result;
+		bfs(g.getNode(src));
+		  List<node_info> result = new ArrayList<node_info>() ; 
+		  	node_info node=g.getNode(dest);
+	        node_info nodeInfo;
+	        queue.add(node);
+	        while (!queue.isEmpty())
+	        {
+	        	nodeInfo = queue.remove();
+	        	//nodeInfo.setTag(1);
+	        	if(!(g.getV(nodeInfo.getKey()).isEmpty())) {
+	            Iterator<node_info> it=g.getV(nodeInfo.getKey()).iterator();
+	            while (it.hasNext())
+	            {
+	            	node_info nTampe=it.next();
+	                if (nTampe.getTag()==(nodeInfo.getTag()-g.getEdge(nTampe.getKey(), nodeInfo.getKey())))
+	                {
+	                	result.add(nTampe);
+	                    queue.add(nTampe);
+	                }
+	            }
+	        }
+	     }
+	    Collections.reverse(result);
+        return  result;
     }
 	
 
 	@Override
 	public boolean save(String file) {
-		// TODO Auto-generated method stub
-		return false;
+		String fileName= file;
+	    FileOutputStream fos;
+	   // WGraph_DS g2=(WGraph_DS) copy();
+		try {
+			fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+		    oos.writeObject(g);
+		    oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	    
+		
+		return true;
 	}
 
 	@Override
 	public boolean load(String file) {
-		// TODO Auto-generated method stub
-		return false;
+		String fileName= file;
+		   FileInputStream fin;
+		try {
+			fin = new FileInputStream(fileName);
+			ObjectInputStream ois = new ObjectInputStream(fin);
+			init((WGraph_DS) ois.readObject());
+			ois.close();
+		} catch ( IOException | ClassNotFoundException e) {
+			
+			e.printStackTrace();
+			return false;
+		}
+		   
+		  
+		return true;
 	}
 
 }

@@ -1,19 +1,18 @@
 package ex1.src;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class WGraph_DS implements weighted_graph {
-	//private node_info nodeInfo;
+public class WGraph_DS implements weighted_graph,Serializable {
 	Collection<node_info> nodeCollection =new ArrayList<node_info>();
 	HashMap<Integer, NodeInfo> nodeHashMap=new HashMap<Integer, NodeInfo>();
 	Collection<Edge> edges= new LinkedList<Edge>();
-	//public static int key=0;
 	int modCount=0;
-	class NodeInfo implements node_info{
+	class NodeInfo implements node_info,Serializable{
 		int key=new Integer(0);// JVM not love this inside JVM we have pools of integers and chars for string
 		String info=new String();
 		double tag=new Double(0);//this too
@@ -56,6 +55,12 @@ public class WGraph_DS implements weighted_graph {
 			this.tag=t;
 			
 		}
+		/*
+		 * @Override public String toString() { return new
+		 * StringBuffer(" key ").append(this.key)
+		 * .append(" info ").append(this.info).append(" tag ").append(this.tag).toString
+		 * (); }
+		 */
 		
 	}
 	
@@ -189,5 +194,11 @@ public class WGraph_DS implements weighted_graph {
 		// TODO Auto-generated method stub
 		return modCount;
 	}
+	/*
+	 * @Override public String toString() { return new
+	 * StringBuffer(" nodeCollection ").append(this.nodeCollection)
+	 * .append(" nodeHashMap ").append(this.nodeHashMap).append(" edges ").append(
+	 * this.edges).toString(); }
+	 */
 
 }
