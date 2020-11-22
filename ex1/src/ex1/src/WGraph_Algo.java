@@ -1,5 +1,6 @@
 package ex1.src;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -127,9 +128,46 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	
 	@Override
 	public List<node_info> shortestPath(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		List<node_info> result = new ArrayList<node_info>()  ;
+        if (this.g.getNode(src) == null || this.g.getNode(dest) == null ){
+            return result;
+        }
+        Iterator<node_info> it =g.getV().iterator();
+		while (it.hasNext()) {
+			it.next().setTag(0);	
+		}
+        node_info ferst = g.getNode(src);
+        queue.add(ferst);
+        ferst.setTag(ferst.getKey());
+        while(!queue.isEmpty()){
+        	node_info tampe =  queue.poll();
+            if(!g.getV(tampe.getKey()).isEmpty()) {
+            Iterator<node_info> itt =g.getV(tampe.getKey()).iterator();
+        		while (itt.hasNext()) {
+        			node_info nd=itt.next();
+        			if(nd.getTag() == 0 ) {
+                        nd.setTag(tampe.getKey());
+                        queue.add(nd);
+                       }
+        			}
+            }
+        }
+        node_info finish = this.g.getNode(dest);
+        if (finish.getTag() == 0) return result;
+        result.add(ferst);
+
+        node_info tampe = this.g.getNode((int)finish.getTag());
+
+        while(tampe.getTag() != tampe.getKey()){
+        	result.add(0, tampe);
+        	tampe = this.g.getNode((int)tampe.getTag());
+
+        }
+        result.add(0, finish);
+
+        return result;
+    }
+	
 
 	@Override
 	public boolean save(String file) {
